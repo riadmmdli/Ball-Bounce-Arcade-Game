@@ -5,7 +5,8 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:background="@drawable/backgorund" >
 
     <TextView
         android:layout_width="wrap_content"
@@ -21,7 +22,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:gravity="center"
-        android:background="#FFFFFF">
+        android:background="@drawable/backgorund">
 
         <ImageButton
             android:id="@+id/startButton"

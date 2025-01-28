@@ -1,5 +1,6 @@
 package com.example.bounceball;
-
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -16,6 +17,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     public static int score = 0;
     private int highScore = 0;
     private boolean isGameOver = false;
+    private Bitmap backgroundImage;
     private boolean ballBouncedThisFrame = false; // Flag to track if the ball bounced this frame
 
     public GameView(Context context) {
@@ -25,6 +27,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     private void init() {
+        backgroundImage = BitmapFactory.decodeResource(getResources(), R.drawable.backgorund);
+
         ball = new Ball(300, 300, 20);
 
         int screenHeight = getHeight(); // This returns the height of the GameView
@@ -97,12 +101,29 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     public void draw(Canvas canvas) {
         super.draw(canvas);
         if (canvas != null) {
-            canvas.drawColor(Color.WHITE);
+            // Scale the background image to fit the entire screen
+            Bitmap backgroundImage = BitmapFactory.decodeResource(getResources(), R.drawable.backgorund);
+
+            // Create a scaled bitmap to fit the screen
+            Bitmap scaledBackground = Bitmap.createScaledBitmap(backgroundImage, getWidth(), getHeight(), false);
+            // Optionally, use only part of the background (wrap content)
+            int contentWidth = getWidth();
+            int contentHeight = getHeight();
+            canvas.drawBitmap(scaledBackground, 0, 0, null);
+
             ball.draw(canvas);
             platform.draw(canvas);
 
-            // Display the current score
-            canvas.drawText("" + score, 50, 100, scorePaint);
+            scorePaint.setTextSize(120);  // Make the font larger
+            scorePaint.setColor(Color.YELLOW);  // Change text color to yellow
+            scorePaint.setFakeBoldText(true);  // Make the text bold
+
+// Draw the score at the top center
+            String scoreText = ""+score;
+            float textWidth = scorePaint.measureText(scoreText);  // Get text width
+            float xPos = (getWidth() - textWidth) / 2;  // Center horizontally
+            float yPos = 150;  // Place it near the top of the screen
+            canvas.drawText(scoreText, xPos, yPos, scorePaint);
 
             if (isGameOver) {
                 drawGameOver(canvas); // Draw the game over screen
@@ -111,12 +132,21 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     private void drawGameOver(Canvas canvas) {
+        // Load the game over image (make sure it's in the drawable folder)
+        Bitmap gameOverImage = BitmapFactory.decodeResource(getResources(), R.drawable.gameover);
+
+        // Draw the game over image at the center of the screen
+        int imageWidth = gameOverImage.getWidth();
+        int imageHeight = gameOverImage.getHeight();
+        int xPos = getWidth() / 2 - imageWidth / 2;  // Center the image horizontally
+        int yPos = getHeight() / 2 - imageHeight / 2 - 200;  // Position the image above the score text
+        canvas.drawBitmap(gameOverImage, xPos, yPos, null);
+
+        // Display the score and high score
         Paint gameOverPaint = new Paint();
         gameOverPaint.setColor(Color.RED);
         gameOverPaint.setTextSize(80);
 
-        // Display game over message and scores
-        canvas.drawText("Game Over!", getWidth() / 2 - 200, getHeight() / 2 - 50, gameOverPaint);
         canvas.drawText("Score: " + score, getWidth() / 2 - 150, getHeight() / 2 + 20, gameOverPaint);
         canvas.drawText("High Score: " + highScore, getWidth() / 2 - 220, getHeight() / 2 + 100, gameOverPaint);
         canvas.drawText("Tap to Restart", getWidth() / 2 - 220, getHeight() / 2 + 180, gameOverPaint);
