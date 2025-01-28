@@ -1,7 +1,9 @@
 package com.example.bounceball;
 
 import android.os.Bundle;
-
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageButton;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -18,13 +20,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        findViewById(R.id.startButton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, GameActivity.class);
-                startActivity(intent);
-            }
+        ImageButton startButton = findViewById(R.id.startButton);
+        Animation pulseAnimation = AnimationUtils.loadAnimation(this, R.anim.pulse);
+        startButton.startAnimation(pulseAnimation);
+        startButton.setOnClickListener(view -> {
+            Intent intent = new Intent(MainActivity.this, GameActivity.class);
+            startActivity(intent);
         });
+
     }
 
 }

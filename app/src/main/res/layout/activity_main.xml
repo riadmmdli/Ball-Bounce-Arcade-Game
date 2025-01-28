@@ -23,15 +23,16 @@
         android:gravity="center"
         android:background="#FFFFFF">
 
-        <Button
+        <ImageButton
             android:id="@+id/startButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Press to Play"
-            android:textSize="24sp"
-            android:padding="16dp"
-            android:background="#FF6200EE"
-            android:textColor="#FFFFFF" />
+            android:src="@drawable/presstostart"
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true"
+            android:background="@null"
+            android:contentDescription="Start Game"
+            android:layout_gravity="center"/>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

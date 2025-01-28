@@ -29,7 +29,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
         int screenHeight = getHeight(); // This returns the height of the GameView
         int platformY = screenHeight - 200; // Place the platform 100 pixels above the bottom edge
-        platform = new Platform(200, platformY, 300, 20);
+        platform = new Platform(200, platformY, 200, 30);
 
         scorePaint = new Paint();
         scorePaint.setColor(Color.BLACK);
@@ -102,7 +102,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             platform.draw(canvas);
 
             // Display the current score
-            canvas.drawText("Score: " + score, 50, 100, scorePaint);
+            canvas.drawText("" + score, 50, 100, scorePaint);
 
             if (isGameOver) {
                 drawGameOver(canvas); // Draw the game over screen
