@@ -9,6 +9,7 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+
 public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     private GameThread gameThread;
     private Ball ball;
@@ -17,7 +18,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     public static int score = 0;
     private int highScore = 0;
     private boolean isGameOver = false;
-    private Bitmap backgroundImage;
+    private boolean isAnimating = false;
+    private long animationStartTime;
+
     private boolean ballBouncedThisFrame = false; // Flag to track if the ball bounced this frame
 
     public GameView(Context context) {
@@ -27,9 +30,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     private void init() {
-        backgroundImage = BitmapFactory.decodeResource(getResources(), R.drawable.backgorund);
 
-        ball = new Ball(300, 300, 20);
+
+        ball = new Ball(300, 300, 40);
 
         int screenHeight = getHeight(); // This returns the height of the GameView
         int platformY = screenHeight - 200; // Place the platform 100 pixels above the bottom edge
@@ -93,6 +96,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             if (ball.getY() > getHeight()) {
                 isGameOver = true;
                 highScore = Math.max(highScore, score);
+                animationStartTime = System.currentTimeMillis(); // Start animation timing
+                isAnimating = true; // Start animation
             }
         }
     }
@@ -101,29 +106,22 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     public void draw(Canvas canvas) {
         super.draw(canvas);
         if (canvas != null) {
-            // Scale the background image to fit the entire screen
-            Bitmap backgroundImage = BitmapFactory.decodeResource(getResources(), R.drawable.backgorund);
+            // Set background color to grey
+            canvas.drawColor(Color.GRAY);  // Set background color to grey
 
-            // Create a scaled bitmap to fit the screen
-            Bitmap scaledBackground = Bitmap.createScaledBitmap(backgroundImage, getWidth(), getHeight(), false);
-            // Optionally, use only part of the background (wrap content)
-            int contentWidth = getWidth();
-            int contentHeight = getHeight();
-            canvas.drawBitmap(scaledBackground, 0, 0, null);
-
-            ball.draw(canvas);
-            platform.draw(canvas);
-
-            scorePaint.setTextSize(120);  // Make the font larger
+            scorePaint.setTextSize(500);  // Make the font larger
             scorePaint.setColor(Color.YELLOW);  // Change text color to yellow
             scorePaint.setFakeBoldText(true);  // Make the text bold
 
-// Draw the score at the top center
-            String scoreText = ""+score;
-            float textWidth = scorePaint.measureText(scoreText);  // Get text width
+            String scoreText = "" + score;
+            float textWidth = scorePaint.measureText(scoreText);
             float xPos = (getWidth() - textWidth) / 2;  // Center horizontally
-            float yPos = 150;  // Place it near the top of the screen
+            float yPos = getHeight() / 2;  // Center vertically
+
             canvas.drawText(scoreText, xPos, yPos, scorePaint);
+
+            ball.draw(canvas);
+            platform.draw(canvas);
 
             if (isGameOver) {
                 drawGameOver(canvas); // Draw the game over screen
@@ -132,30 +130,59 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     private void drawGameOver(Canvas canvas) {
-        // Load the game over image (make sure it's in the drawable folder)
-        Bitmap gameOverImage = BitmapFactory.decodeResource(getResources(), R.drawable.gameover);
+        // Display "GAME OVER" text with animation
+        Paint gameOverTextPaint = new Paint();
+        gameOverTextPaint.setColor(Color.BLACK);
+        gameOverTextPaint.setFakeBoldText(true);
 
-        // Draw the game over image at the center of the screen
-        int imageWidth = gameOverImage.getWidth();
-        int imageHeight = gameOverImage.getHeight();
-        int xPos = getWidth() / 2 - imageWidth / 2;  // Center the image horizontally
-        int yPos = getHeight() / 2 - imageHeight / 2 - 200;  // Position the image above the score text
-        canvas.drawBitmap(gameOverImage, xPos, yPos, null);
+        long elapsedTime = System.currentTimeMillis() - animationStartTime;
 
-        // Display the score and high score
-        Paint gameOverPaint = new Paint();
-        gameOverPaint.setColor(Color.RED);
-        gameOverPaint.setTextSize(80);
+        if (isAnimating) {
+            // Animate "GAME OVER" text: enlarge and fade it out
+            float scaleFactor = Math.min(2.0f, 1.0f + (elapsedTime /     1000.0f)); // Max size is double the original size
+            float alpha = Math.max(0, 1 - (elapsedTime / 2000.0f)); // Fade out after scaling
 
-        canvas.drawText("Score: " + score, getWidth() / 2 - 150, getHeight() / 2 + 20, gameOverPaint);
-        canvas.drawText("High Score: " + highScore, getWidth() / 2 - 220, getHeight() / 2 + 100, gameOverPaint);
-        canvas.drawText("Tap to Restart", getWidth() / 2 - 220, getHeight() / 2 + 180, gameOverPaint);
+            gameOverTextPaint.setAlpha((int) (alpha * 255)); // Set transparency
+
+            // Draw the scaled text in the center of the screen
+            String gameOverText = "GAME OVER";
+            gameOverTextPaint.setTextSize(120); // Set the base size of the text
+            float textWidth = gameOverTextPaint.measureText(gameOverText);
+            float xPos = (getWidth() - textWidth) / 2;  // Center horizontally
+            float yPos = getHeight() / 4;  // Position vertically a bit higher than center
+            canvas.save();
+            canvas.scale(scaleFactor, scaleFactor, getWidth() / 2, getHeight() / 4); // Apply scaling
+            canvas.drawText(gameOverText, xPos, yPos, gameOverTextPaint);
+            canvas.restore();
+
+
+
+            if (elapsedTime > 2500) {
+                isAnimating = false;  // Stop animation after 2.5 seconds
+            }
+        }
+
+        // After animation, display the score and high score
+        if (!isAnimating) {
+            Paint gameOverPaint = new Paint();
+            gameOverPaint.setColor(Color.BLACK);
+            gameOverPaint.setTextSize(80);
+
+            // Draw the score
+            canvas.drawText("Score: " + score, getWidth() / 2 - 150, getHeight() / 2 + 20, gameOverPaint);
+
+            // Draw the high score
+            canvas.drawText("High Score: " + highScore, getWidth() / 2 - 220, getHeight() / 2 + 100, gameOverPaint);
+
+            // Draw the restart message
+            canvas.drawText("Tap to Restart", getWidth() / 2 - 220, getHeight() / 2 + 180, gameOverPaint);
+        }
     }
 
     private void restartGame() {
         score = 0; // Reset score when restarting
         isGameOver = false;
-        ball = new Ball(300, 300, 20); // Reset ball position
+        ball = new Ball(300, 300, 40); // Reset ball position
         platform.setX(getWidth() / 2 - platform.getWidth() / 2); // Center the platform
         ballBouncedThisFrame = false; // Reset bounce flag
     }

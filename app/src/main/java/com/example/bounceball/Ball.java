@@ -5,7 +5,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 public class Ball {
     private int x, y, radius;
-    private int dx = 5, dy = 5;
+    private int dx = 10, dy = 10;
     private Paint paint;
 
     public Ball(int x, int y, int radius) {
