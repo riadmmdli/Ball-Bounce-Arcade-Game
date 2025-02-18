@@ -36,7 +36,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
         int screenHeight = getHeight(); // This returns the height of the GameView
         int platformY = screenHeight - 200; // Place the platform 100 pixels above the bottom edge
-        platform = new Platform(200, platformY, 200, 30);
+        platform = new Platform(200, platformY, 200, 50, 25);
 
         scorePaint = new Paint();
         scorePaint.setColor(Color.BLACK);
