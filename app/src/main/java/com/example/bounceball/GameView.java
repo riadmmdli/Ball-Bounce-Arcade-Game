@@ -1,6 +1,7 @@
     package com.example.bounceball;
     import android.graphics.Bitmap;
     import android.graphics.BitmapFactory;
+    import android.content.SharedPreferences;
     import android.content.Context;
     import android.graphics.Canvas;
     import android.graphics.Color;
@@ -22,6 +23,8 @@
         private boolean isAnimating = false;
         private long animationStartTime;
 
+        private SharedPreferences prefs;
+
         private boolean ballBouncedThisFrame = false; // Flag to track if the ball bounced this frame
 
         private int[] backgroundColors = {
@@ -40,6 +43,9 @@
         public GameView(Context context) {
             super(context);
             getHolder().addCallback(this);
+            prefs = context.getSharedPreferences("GamePrefs", Context.MODE_PRIVATE);
+            highScore = prefs.getInt("high_score", 0); // Load saved high score
+
             init();
         }
 
@@ -117,7 +123,7 @@
                 // If the ball falls below the screen, end the game
                 if (ball.getY() > getHeight()) {
                     isGameOver = true;
-                    highScore = Math.max(highScore, score);
+                    updateHighScore(score); // Save high score
                     animationStartTime = System.currentTimeMillis(); // Start animation timing
                     isAnimating = true; // Start animation
                 }
@@ -151,6 +157,15 @@
             }
         }
 
+        private void updateHighScore(int currentScore) {
+            if (currentScore > highScore) {
+                highScore = currentScore;
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putInt("high_score", highScore);
+                editor.apply();
+            }
+        }
+
         private void changeBackgroundColor() {
             currentColorIndex = (currentColorIndex + 1) % backgroundColors.length;
             backgroundColor = backgroundColors[currentColorIndex];
@@ -158,7 +173,6 @@
             // Update score color to be a darker version of the background
             scorePaint.setColor(getDarkerColor(backgroundColor));
         }
-
 
         private int getDarkerColor(int color) {
             return Color.rgb(
