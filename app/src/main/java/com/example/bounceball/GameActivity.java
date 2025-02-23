@@ -1,11 +1,14 @@
 package com.example.bounceball;
+
+import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AlertDialog;
-
 
 public class GameActivity extends AppCompatActivity {
+
+
     private GameView gameView;
 
     @Override
@@ -25,6 +28,5 @@ public class GameActivity extends AppCompatActivity {
                 })
                 .setNegativeButton("No", null)
                 .show();
-
     }
 }

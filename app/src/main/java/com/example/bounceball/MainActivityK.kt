@@ -1,16 +1,18 @@
 package com.example.bounceball
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.view.animation.AnimationUtils
+import android.widget.Button
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
-import com.example.bounceball.GameActivity
-import com.example.bounceball.R
 
-class MainActivityK : AppCompatActivity() {
+
+class   MainActivityK : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
@@ -21,6 +23,7 @@ class MainActivityK : AppCompatActivity() {
         startButton.startAnimation(pulseAnimation)
 
         startButton.setOnClickListener {
+
             val intent = Intent(this, GameActivity::class.java)
             startActivity(intent)
         }
