@@ -5,7 +5,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 public class Ball {
     private int x, y, radius;
-    private int dx = 10, dy = 10;
+    private int dx = 40, dy = 25;
     private Paint paint;
 
     public Ball(int x, int y, int radius) {
@@ -38,11 +38,23 @@ public class Ball {
         }
 
 
-        // Bounce off the left and right edges of the screen
-        if (x <= 0 || x >= 1080) dx = -dx;
+        // 🛑 **Fix for Ball Sticking to Walls**
+        if (x - radius <= 0) {  // Left wall collision
+            x = radius; // Push away from wall
+            dx = Math.abs(dx); // Move right
+        } else if (x + radius >= 1080) {  // Right wall collision
+            x = 1080 - radius; // Push away from wall
+            dx = -Math.abs(dx); // Move left
+        }
 
         // Bounce off the top edge of the screen
-        if (y <= 0) dy = -dy;
+        if (y - radius <= 0) {
+            y = radius; // Push away from the top edge
+            dy = -dy;
+        }
+
+
+
 
     }
 

@@ -72,7 +72,7 @@
             // Now, get correct height
             int screenHeight = getHeight();
             int platformY = screenHeight - 200; // Place the platform 200 pixels above bottom
-            platform = new Platform(200, platformY, 200, 50, 25);
+            platform = new Platform(200, platformY, 250, 100, 50);
         }
 
         @Override
@@ -201,7 +201,7 @@
             gameOverTextPaint.setAlpha((int) (alpha * 255)); // Set transparency dynamically
 
 // Set base text size (will be scaled dynamically)
-            gameOverTextPaint.setTextSize(140);
+            gameOverTextPaint.setTextSize(70);
 
 // Calculate text width dynamically for perfect centering
             String gameOverText = "GAME OVER";
@@ -226,7 +226,7 @@
                 Paint modernTextPaint = new Paint();
                 modernTextPaint.setColor(Color.WHITE);
                 modernTextPaint.setTypeface(Typeface.create(Typeface.SANS_SERIF, Typeface.BOLD));
-                modernTextPaint.setTextSize(150);
+                modernTextPaint.setTextSize(100);
                 modernTextPaint.setAntiAlias(true); // Smooth edges
                 modernTextPaint.setShadowLayer(10, 0, 0, Color.BLACK); // Add a soft glow effect
 
@@ -236,7 +236,7 @@
                 canvas.drawText(scoreText, (getWidth() - scoreWidth) / 2, getHeight() / 2, modernTextPaint);
 
 // Draw the high score
-                modernTextPaint.setTextSize(150); // Slightly smaller
+                modernTextPaint.setTextSize(100); // Slightly smaller
                 String highScoreText = "High Score: " + highScore;
                 float highScoreWidth = modernTextPaint.measureText(highScoreText);
                 canvas.drawText(highScoreText, (getWidth() - highScoreWidth) / 2, getHeight() / 2 + 150, modernTextPaint);
@@ -245,14 +245,14 @@
                 Paint restartPaint = new Paint();
                 restartPaint.setColor(Color.CYAN);
                 restartPaint.setTypeface(Typeface.create(Typeface.SANS_SERIF, Typeface.BOLD));
-                restartPaint.setTextSize(150);
+                restartPaint.setTextSize(100);
                 restartPaint.setAntiAlias(true);
                 restartPaint.setShadowLayer(15, 0, 0, Color.BLUE); // Strong glow effect
 
 // Draw "Tap to Restart"
-                String restartText = "Tap to Restart";
+                String restartText = "Tap to Restart⟳";
                 float restartWidth = restartPaint.measureText(restartText);
-                canvas.drawText(restartText, (getWidth() - restartWidth) / 2, getHeight() / 2 + 300, restartPaint);
+                canvas.drawText(restartText, (getWidth() - restartWidth) / 2, getHeight() / 2 + 700, restartPaint);
 
             }
         }
