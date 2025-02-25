@@ -40,7 +40,7 @@
 
 
         // Add a constructor with color parameter for the ball
-        public GameView(Context context) {
+        public GameView(Context context , int ballColorIndex) {
             super(context);
             getHolder().addCallback(this);
             prefs = context.getSharedPreferences("GamePrefs", Context.MODE_PRIVATE);
@@ -58,7 +58,7 @@
             scorePaint.setColor(getDarkerColor(backgroundColor));
 
             // Initialize the ball with the passed color
-            ball = new Ball(300, 300, 40); // Set ball color from MainActivity
+            ball = new Ball(getContext() ,300, 300, 40); // Set ball color from MainActivity
         }
 
         @Override
@@ -260,7 +260,7 @@
         private void restartGame() {
             score = 0; // Reset score when restarting
             isGameOver = false;
-            ball = new Ball(300, 300, 40 ); // Reset ball position
+            ball = new Ball(getContext() , 300, 300, 40 ); // Reset ball position
             platform.setX(getWidth() / 2 - platform.getWidth() / 2); // Center the platform
             ballBouncedThisFrame = false; // Reset bounce flag
 

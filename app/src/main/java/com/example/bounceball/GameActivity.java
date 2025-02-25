@@ -18,11 +18,14 @@ public class GameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // Get the color index passed from MainActivity
+        int ballColorIndex = getIntent().getIntExtra("ballColorIndex", 0);
+
         // Initialize SharedPreferences
         prefs = getSharedPreferences("GamePrefs", MODE_PRIVATE);
         highScore = prefs.getInt("high_score", 0); // Load the saved high score
 
-        gameView = new GameView(this);
+        gameView = new GameView(this , ballColorIndex);
         setContentView(gameView);
     }
 

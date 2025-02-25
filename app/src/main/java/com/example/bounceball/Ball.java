@@ -1,5 +1,6 @@
 package com.example.bounceball;
-
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -8,12 +9,20 @@ public class Ball {
     private int dx = 40, dy = 25;
     private Paint paint;
 
-    public Ball(int x, int y, int radius) {
+    private SharedPreferences sharedPreferences;
+
+    public Ball(Context context, int x, int y, int radius) {
         this.x = x;
         this.y = y;
         this.radius = radius;
         paint = new Paint();
-        paint.setColor(Color.RED);
+
+        // Load saved color
+        sharedPreferences = context.getSharedPreferences("GamePrefs", Context.MODE_PRIVATE);
+        int savedColorIndex = sharedPreferences.getInt("ballColorIndex", 0);
+        int[] colors = {Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW, Color.CYAN};
+        paint.setColor(colors[savedColorIndex]);
+
     }
 
     public void update(Platform platform) {
@@ -94,5 +103,10 @@ public class Ball {
 
     public void setY(int y) {
         this.y = y;
+    }
+
+    // Method to change the ball color
+    public void setColor(int color) {
+        paint.setColor(color);  // Update the ball's color
     }
 }
