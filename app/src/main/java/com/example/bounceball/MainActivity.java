@@ -4,14 +4,17 @@ package com.example.bounceball;
 import android.os.Bundle;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-
+import android.view.View;
+import android.widget.TextView;
 import android.widget.ImageButton;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Intent;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -26,6 +29,8 @@ public class MainActivity extends AppCompatActivity {
     private SharedPreferences sharedPreferences;
     private ImageButton btnChangeColor;
 
+    private View startTapArea;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -35,14 +40,15 @@ public class MainActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences("GamePrefs", MODE_PRIVATE);
         currentColorIndex = sharedPreferences.getInt("ballColorIndex", 0); // Load saved color
 
-        ImageButton startButton = findViewById(R.id.startButton);
+        TextView tapToStart = findViewById(R.id.tapToStart);
         btnChangeColor = findViewById(R.id.btnChangeColor);
+        startTapArea = findViewById(R.id.startTapArea);
 
         // Set initial color of the button
         btnChangeColor.setBackgroundColor(colors[currentColorIndex]);
 
-        Animation pulseAnimation = AnimationUtils.loadAnimation(this, R.anim.pulse);
-        startButton.startAnimation(pulseAnimation);
+        Animation waveAnimation = AnimationUtils.loadAnimation(this, R.anim.wave_anim);
+        tapToStart.startAnimation(waveAnimation);
 
 
 
@@ -51,11 +57,13 @@ public class MainActivity extends AppCompatActivity {
             currentColorIndex = (currentColorIndex + 1) % colors.length; // Cycle colors
             sharedPreferences.edit().putInt("ballColorIndex", currentColorIndex).apply(); // Save choice
             btnChangeColor.setBackgroundColor(colors[currentColorIndex]); // Update button color
+            view.setClickable(true);
         });
 
-        startButton.setOnClickListener(view -> {
+        startTapArea.setOnClickListener(view -> {
             Intent intent = new Intent(MainActivity.this, GameActivity.class);
             startActivity(intent);
+            finish();
         });
 
 

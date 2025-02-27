@@ -12,7 +12,7 @@
     import android.view.SurfaceView;
 
 
-    public class GameView extends SurfaceView implements SurfaceHolder.Callback {
+    public class    GameView extends SurfaceView implements SurfaceHolder.Callback {
         private GameThread gameThread;
         private Ball ball;
         private Platform platform;
@@ -143,8 +143,8 @@
 
                 String scoreText = "" + score;
                 float textWidth = scorePaint.measureText(scoreText);
-                float xPos = (getWidth() - textWidth) / 2;  // Center horizontally
-                float yPos = getHeight() / 2;  // Center higher
+                float xPos = (getWidth() - textWidth) / 2;
+                float yPos = getHeight() / 2;
 
                 canvas.drawText(scoreText, xPos, yPos, scorePaint);
 
@@ -152,7 +152,7 @@
                 platform.draw(canvas);
 
                 if (isGameOver) {
-                    drawGameOver(canvas); // Draw the game over screen
+                    drawGameOver(canvas);
                 }
             }
         }
@@ -170,7 +170,7 @@
             currentColorIndex = (currentColorIndex + 1) % backgroundColors.length;
             backgroundColor = backgroundColors[currentColorIndex];
 
-            // Update score color to be a darker version of the background
+
             scorePaint.setColor(getDarkerColor(backgroundColor));
         }
 
@@ -183,27 +183,26 @@
         }
 
         private void drawGameOver(Canvas canvas) {
-            // Create a modern paint style for the "GAME OVER" text
+
             Paint gameOverTextPaint = new Paint();
             gameOverTextPaint.setColor(Color.WHITE); // White color for contrast
             gameOverTextPaint.setTypeface(Typeface.create(Typeface.SANS_SERIF, Typeface.BOLD));
             gameOverTextPaint.setAntiAlias(true);
             gameOverTextPaint.setShadowLayer(15, 0, 0, Color.RED); // Subtle glow effect
 
-// Calculate elapsed time for animation
+
             long elapsedTime = System.currentTimeMillis() - animationStartTime;
 
-// Smooth scaling effect (from 1.0x to 2.5x)
+
             float scaleFactor = Math.min(2.5f, 1.0f + (elapsedTime / 800.0f)); // Faster growth
 
-// Smooth fade-out effect (disappears after 3s)
+
             float alpha = Math.max(0, 1 - (elapsedTime / 2500.0f)); // Gradual fade-out
             gameOverTextPaint.setAlpha((int) (alpha * 255)); // Set transparency dynamically
 
-// Set base text size (will be scaled dynamically)
             gameOverTextPaint.setTextSize(70);
 
-// Calculate text width dynamically for perfect centering
+
             String gameOverText = "GAME OVER";
             float textWidth = gameOverTextPaint.measureText(gameOverText);
             float xPos = (getWidth() - textWidth) / 2;  // Center horizontally
@@ -241,15 +240,15 @@
                 float highScoreWidth = modernTextPaint.measureText(highScoreText);
                 canvas.drawText(highScoreText, (getWidth() - highScoreWidth) / 2, getHeight() / 2 + 150, modernTextPaint);
 
-// Create a glowing effect for "Tap to Restart"
+//"Tap to Restart"
                 Paint restartPaint = new Paint();
                 restartPaint.setColor(Color.CYAN);
                 restartPaint.setTypeface(Typeface.create(Typeface.SANS_SERIF, Typeface.BOLD));
                 restartPaint.setTextSize(100);
                 restartPaint.setAntiAlias(true);
-                restartPaint.setShadowLayer(15, 0, 0, Color.BLUE); // Strong glow effect
+                restartPaint.setShadowLayer(15, 0, 0, Color.BLUE);
 
-// Draw "Tap to Restart"
+
                 String restartText = "Tap to Restart⟳";
                 float restartWidth = restartPaint.measureText(restartText);
                 canvas.drawText(restartText, (getWidth() - restartWidth) / 2, getHeight() / 2 + 700, restartPaint);
