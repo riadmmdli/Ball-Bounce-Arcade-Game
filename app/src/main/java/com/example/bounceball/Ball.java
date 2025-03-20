@@ -4,28 +4,31 @@ import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+
+
 public class Ball {
     private int x, y, radius;
-    private int dx = 40, dy = 25;
+    private int dx = 15, dy = 10;
     private Paint paint;
 
     private SharedPreferences sharedPreferences;
 
-    public Ball(Context context, int x, int y, int radius) {
+    private GameView gameView;
+    public Ball(GameView gameView, int x, int y, int radius) {
         this.x = x;
         this.y = y;
         this.radius = radius;
         paint = new Paint();
 
         // Load saved color
-        sharedPreferences = context.getSharedPreferences("GamePrefs", Context.MODE_PRIVATE);
+        sharedPreferences = gameView.getContext().getSharedPreferences("GamePrefs", Context.MODE_PRIVATE);
         int savedColorIndex = sharedPreferences.getInt("ballColorIndex", 0);
         int[] colors = {Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW, Color.CYAN};
         paint.setColor(colors[savedColorIndex]);
 
     }
 
-    public void update(Platform platform) {
+    public void update(Platform platform , GameView gameView) {
         // Temporarily store the ball's next position
         int nextX = x + dx;
         int nextY = y + dy;
@@ -40,6 +43,11 @@ public class Ball {
             bounce();
 
             GameView.score++;
+
+            // 🛑 **Trigger Vibration on Collision**
+            if (gameView != null) {
+                gameView.vibrateOnCollision(gameView.getContext());
+            }
         } else {
             // If no collision, update the position normally
             x = nextX;

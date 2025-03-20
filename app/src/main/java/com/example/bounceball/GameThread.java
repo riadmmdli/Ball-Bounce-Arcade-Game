@@ -20,6 +20,12 @@ public class GameThread extends Thread{
         this.running = isRunning;
     }
 
+    public boolean isRunning() {
+        return running;
+    }
+
+
+
     @Override
     public void run() {
         long startTime;
@@ -71,5 +77,6 @@ public class GameThread extends Thread{
             }
         }
     }
+
 
 }

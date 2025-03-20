@@ -9,6 +9,7 @@
     android:background="#57C79C">
 
 
+
     <View
         android:id="@+id/startTapArea"
         android:layout_width="0dp"
@@ -22,6 +23,13 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
         app:layout_constraintWidth_percent="1" />
+
+    <com.example.bounceball.BouncingBallsView
+        android:id="@+id/bouncingBallsView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="50dp"/>
 
     <TextView
         android:id="@+id/tapToStart"
@@ -64,7 +72,6 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintVertical_bias="0.5"
-        />
+        app:layout_constraintVertical_bias="0.5" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

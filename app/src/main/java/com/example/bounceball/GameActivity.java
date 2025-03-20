@@ -2,53 +2,84 @@ package com.example.bounceball;
 
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.graphics.Color;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.view.Gravity;
+import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.TextView;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 public class GameActivity extends AppCompatActivity {
 
-
     private GameView gameView;
     private SharedPreferences prefs;
     private int highScore = 0;
+    private TextView countdownTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Get the color index passed from MainActivity
+        // Get ball color index
         int ballColorIndex = getIntent().getIntExtra("ballColorIndex", 0);
 
-        // Initialize SharedPreferences
+        // Load high score
         prefs = getSharedPreferences("GamePrefs", MODE_PRIVATE);
-        highScore = prefs.getInt("high_score", 0); // Load the saved high score
+        highScore = prefs.getInt("high_score", 0);
 
-        gameView = new GameView(this , ballColorIndex);
-        setContentView(gameView);
+        // Initialize game view
+        gameView = new GameView(this, ballColorIndex);
+
+        // Create a layout to hold both game view and countdown text
+        FrameLayout frameLayout = new FrameLayout(this);
+        frameLayout.addView(gameView);
+
+        // Initialize countdown text overlay
+        countdownTextView = new TextView(this);
+        countdownTextView.setTextSize(50);
+        countdownTextView.setVisibility(View.INVISIBLE); // Initially hidden
+        countdownTextView.setGravity(Gravity.CENTER);
+
+        // Add countdown to layout
+        frameLayout.addView(countdownTextView);
+
+        setContentView(frameLayout);
     }
 
-    // Method to update high score
-    public void updateHighScore(int currentScore) {
-        if (currentScore > highScore) {
-            highScore = currentScore;
-
-            // Save the new high score
-            SharedPreferences.Editor editor = prefs.edit();
-            editor.putInt("high_score", highScore);
-            editor.apply();
-        }
-    }
     @Override
-    public void onBackPressed() {
-        new AlertDialog.Builder(this)
-                .setTitle("Exit Game")
-                .setMessage("Are you sure you want to quit?")
-                .setPositiveButton("Yes", (dialog, which) -> {
-                    super.onBackPressed(); // Call the default back button behavior
-                })
-                .setNegativeButton("No", null)
-                .show();
+    protected void onPause() {
+        super.onPause();
+        gameView.pauseGame(); // Pause the game when the screen turns off
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // Show countdown when resuming
+        countdownTextView.setVisibility(View.VISIBLE);
+        startCountdown();
+    }
+
+    private void startCountdown() {
+        final Handler handler = new Handler();
+        final int[] countdown = {3}; // Start from 3 seconds
+
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                if (countdown[0] > 0) {
+                    countdownTextView.setText(String.valueOf(countdown[0]));
+                    countdown[0]--;
+                    handler.postDelayed(this, 1000);
+                } else {
+                    countdownTextView.setVisibility(View.INVISIBLE);
+                    gameView.resumeGame(); // Resume the game
+                }
+            }
+        });
     }
 }
