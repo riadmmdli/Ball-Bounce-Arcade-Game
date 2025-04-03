@@ -119,33 +119,15 @@ public class    GameView extends SurfaceView implements SurfaceHolder.Callback {
         }
     }
 
-    public void startCountDown() {
-        if (!isCountingDown) {
-            isCountingDown = true;
-            countdownValue = 3;
-            countdownStartTime = System.currentTimeMillis();
-
-            new Thread(() -> {
-                while (countdownValue > 0) {
-                    long elapsedTime = System.currentTimeMillis() - countdownStartTime;
-                    if (elapsedTime >= 1000 * (4 - countdownValue)) {
-                        countdownValue--;
-                        postInvalidate(); // Redraw the screen with updated countdown
-                    }
-                }
-                isCountingDown = false;
-                post(() -> resumeGame()); // Resume game after countdown
-            }).start();
-        }
-    }
-
     public void resumeGame() {
+        isCountingDown = false; // Disable countdown flag
         if (gameThread == null || !gameThread.isRunning()) {
             gameThread = new GameThread(getHolder(), this);
             gameThread.setRunning(true);
             gameThread.start();
         }
     }
+
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -163,6 +145,10 @@ public class    GameView extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     public void update() {
+        if (isCountingDown) {
+            return; // Skip game updates during countdown
+        }
+
         if (!isGameOver) {
             int prevScore = score;
             ball.update(platform, this); // Update the ball's position
@@ -182,6 +168,7 @@ public class    GameView extends SurfaceView implements SurfaceHolder.Callback {
             }
         }
     }
+
 
     @Override
     public void draw(Canvas canvas) {

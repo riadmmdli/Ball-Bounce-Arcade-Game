@@ -1,6 +1,7 @@
 package com.example.bounceball;
 
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -67,6 +68,18 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+    }
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this)
+                .setTitle("Exit Game")
+                .setMessage("Are you sure you want to exit?")
+                .setPositiveButton("Yes", (dialog, which) -> {
+                    dialog.dismiss(); // Close the dialog
+                    super.onBackPressed(); // Now call the default back action
+                })
+                .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
+                .show();
     }
 
 }
