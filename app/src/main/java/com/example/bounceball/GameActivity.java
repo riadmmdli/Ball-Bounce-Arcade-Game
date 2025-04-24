@@ -50,7 +50,8 @@ public class GameActivity extends AppCompatActivity {
         frameLayout.addView(countdownTextView);
 
         setContentView(frameLayout);
-        Toast.makeText(this, "Game Started", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getResources().getString(R.string.game_started), Toast.LENGTH_LONG).show();
+
     }
 
     @Override
@@ -98,13 +99,13 @@ public class GameActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         new AlertDialog.Builder(this)
-                .setTitle("Exit Game")
-                .setMessage("Are you sure you want to exit?")
-                .setPositiveButton("Yes", (dialog, which) -> {
-                    dialog.dismiss(); // Close the dialog
-                    super.onBackPressed(); // Now call the default back action
+                .setTitle(getResources().getString(R.string.exit_game_title))
+                .setMessage(getResources().getString(R.string.exit_game_message))
+                .setPositiveButton(getResources().getString(R.string.yes), (dialog, which) -> {
+                    dialog.dismiss();
+                    super.onBackPressed();
                 })
-                .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
+                .setNegativeButton(getResources().getString(R.string.no), (dialog, which) -> dialog.dismiss())
                 .show();
     }
 }

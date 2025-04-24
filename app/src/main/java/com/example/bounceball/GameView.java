@@ -257,7 +257,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             editor.apply();
 
             ((Activity) getContext()).runOnUiThread(() ->
-                    Toast.makeText(getContext(), "Congratulations!!!New High Score: " + highScore, Toast.LENGTH_LONG).show()
+                    Toast.makeText(getContext(), getResources().getString(R.string.new_high_score) + " : " + highScore, Toast.LENGTH_LONG).show()
+
             );
 
             vibrateOnCollision(getContext());
@@ -301,7 +302,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         gameOverTextPaint.setTextSize(70);
 
 
-        String gameOverText = "GAME OVER";
+        String gameOverText = getResources().getString(R.string.game_over);
+
         float textWidth = gameOverTextPaint.measureText(gameOverText);
         float xPos = (getWidth() - textWidth) / 2;  // Center horizontally
         float yPos = getHeight() / 2;  // Center vertically
@@ -328,13 +330,15 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             modernTextPaint.setShadowLayer(10, 0, 0, Color.BLACK); // Add a soft glow effect
 
 // Draw the score
-            String scoreText = "Score: " + score;
+            String scoreText = getResources().getString(R.string.score) + " " + score;
+
             float scoreWidth = modernTextPaint.measureText(scoreText);
             canvas.drawText(scoreText, (getWidth() - scoreWidth) / 2, getHeight() / 2, modernTextPaint);
 
 // Draw the high score
             modernTextPaint.setTextSize(100); // Slightly smaller
-            String highScoreText = "High Score: " + highScore;
+            String highScoreText = getResources().getString(R.string.high_score) + " " + highScore;
+
             float highScoreWidth = modernTextPaint.measureText(highScoreText);
             canvas.drawText(highScoreText, (getWidth() - highScoreWidth) / 2, getHeight() / 2 + 150, modernTextPaint);
 
@@ -347,7 +351,11 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             restartPaint.setShadowLayer(15, 0, 0, Color.BLUE);
 
 
-            String restartText = "Tap to Restart⟳";
+            String restartText = getResources().getString(R.string.tap_to_restart);
+
+// Use smaller size
+            restartPaint.setTextSize(60);  // Adjusted from 100 to 60 or less
+
             float restartWidth = restartPaint.measureText(restartText);
             canvas.drawText(restartText, (getWidth() - restartWidth) / 2, getHeight() / 2 + 700, restartPaint);
 

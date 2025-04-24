@@ -31,21 +31,26 @@
         android:layout_marginTop="50dp"
         android:layout_marginBottom="50dp"/>
 
+
     <TextView
         android:id="@+id/tapToStart"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="300dp"
         android:fontFamily="@font/bungee_spice"
-        android:text="Tap To Start"
+        android:text="@string/tap_to_start"
         android:textColor="#FFFFFF"
         android:textSize="40sp"
+        android:gravity="center"
+        android:ellipsize="none"
+        android:maxLines="2"
         app:layout_constraintBottom_toTopOf="@id/txtChangeColor"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintVertical_bias="0.5" />
+
 
     <TextView
         android:id="@+id/txtChangeColor"
@@ -53,7 +58,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/bungee_spice"
         android:gravity="center"
-        android:text="Change Color"
+        android:text="@string/change_color"
         android:textColor="#FF4D14"
         android:textSize="30sp"
         android:typeface="sans"
@@ -73,5 +78,16 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintVertical_bias="0.5" />
+
+    <ImageButton
+        android:id="@+id/btnLanguage"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_margin="16dp"
+        android:background="@android:color/transparent"
+        android:contentDescription="Change Language"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
