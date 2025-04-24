@@ -3,6 +3,7 @@ package com.example.bounceball;
 
 import android.app.AlertDialog;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -49,6 +50,8 @@ public class MainActivity extends AppCompatActivity {
 
         // ✅ Set layout AFTER setting locale
         setContentView(R.layout.activity_main);
+
+
 
         currentColorIndex = sharedPreferences.getInt("ballColorIndex", 0);
 
@@ -98,14 +101,35 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-private void setLocale(String langCode) {
-    Locale locale = new Locale(langCode);
-    Locale.setDefault(locale);
+    private void setLocale(String langCode) {
+        Locale locale = new Locale(langCode);
+        Locale.setDefault(locale);
 
-    Configuration config = new Configuration();
-    config.setLocale(locale);
-    getResources().updateConfiguration(config, getResources().getDisplayMetrics());
-}
+        Configuration config = new Configuration();
+        config.setLocale(locale);
+        getResources().updateConfiguration(config, getResources().getDisplayMetrics());
+    }
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus) {
+            enableImmersiveMode();
+        }
+    }
+
+    private void enableImmersiveMode() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            getWindow().getDecorView().setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+            );
+        }
+    }
+
 
 
 @Override
