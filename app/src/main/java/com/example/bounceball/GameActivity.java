@@ -10,6 +10,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -49,6 +50,7 @@ public class GameActivity extends AppCompatActivity {
         frameLayout.addView(countdownTextView);
 
         setContentView(frameLayout);
+        Toast.makeText(this, "Game Started", Toast.LENGTH_SHORT).show();
     }
 
     @Override

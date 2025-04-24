@@ -59,15 +59,18 @@ public class Ball {
         if (x - radius <= 0) {  // Left wall collision
             x = radius; // Push away from wall
             dx = Math.abs(dx); // Move right
+            gameView.playBounceSound();
         } else if (x + radius >= 1080) {  // Right wall collision
             x = 1080 - radius; // Push away from wall
             dx = -Math.abs(dx); // Move left
+            gameView.playBounceSound();
         }
 
         // Bounce off the top edge of the screen
         if (y - radius <= 0) {
             y = radius; // Push away from the top edge
             dy = -dy;
+            gameView.playBounceSound();
         }
 
 

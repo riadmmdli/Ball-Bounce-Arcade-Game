@@ -1,5 +1,7 @@
 package com.example.bounceball;
-
+import android.media.AudioAttributes;
+import android.media.SoundPool;
+import android.app.Activity;
 import android.content.SharedPreferences;
 import android.content.Context;
 import android.graphics.Canvas;
@@ -16,7 +18,7 @@ import android.os.Vibrator;
 import android.widget.Toast;
 
 
-public class    GameView extends SurfaceView implements SurfaceHolder.Callback {
+public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     private GameThread gameThread;
     private Ball ball;
     private Platform platform;
@@ -34,7 +36,8 @@ public class    GameView extends SurfaceView implements SurfaceHolder.Callback {
     private boolean isCountingDown = false;
     private int countdownValue = 3;
     private long countdownStartTime;
-
+    private SoundPool soundPool;
+    private int bounceSoundId;
 
     private int[] backgroundColors = {
             Color.rgb(173, 216, 230), // Light Blue
@@ -77,6 +80,23 @@ public class    GameView extends SurfaceView implements SurfaceHolder.Callback {
 
         // Initialize the ball with the passed color
         ball = new Ball(this ,300, 300, 40); // Set ball color from MainActivity
+
+        AudioAttributes audioAttributes = new AudioAttributes.Builder()
+                .setUsage(AudioAttributes.USAGE_GAME)
+                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                .build();
+
+        soundPool = new SoundPool.Builder()
+                .setMaxStreams(5)
+                .setAudioAttributes(audioAttributes)
+                .build();
+
+        bounceSoundId = soundPool.load(getContext(), R.raw.bounce, 1);
+
+    }
+
+    public void playBounceSound() {
+        soundPool.play(bounceSoundId, 1, 1, 0, 0, 1);
     }
 
     @Override
@@ -151,22 +171,24 @@ public class    GameView extends SurfaceView implements SurfaceHolder.Callback {
 
         if (!isGameOver) {
             int prevScore = score;
-            ball.update(platform, this); // Update the ball's position
-            // Vibrate when ball touches platform
+            ball.update(platform, this);
 
-            // If the ball hits the platform, update the background color every 5 hits
+            if (score > highScore) {
+                // <-- Move here so toast happens immediately
+            }
+
             if (score > prevScore && score % 5 == 0) {
                 changeBackgroundColor();
             }
 
-            // If the ball falls below the screen, end the game
             if (ball.getY() > getHeight()) {
                 isGameOver = true;
-                updateHighScore(score); // Save high score
-                animationStartTime = System.currentTimeMillis(); // Start animation timing
-                isAnimating = true; // Start animation
+                updateHighScore(score);  // ✅ Only update high score here
+                animationStartTime = System.currentTimeMillis();
+                isAnimating = true;
             }
         }
+
     }
 
 
@@ -233,25 +255,14 @@ public class    GameView extends SurfaceView implements SurfaceHolder.Callback {
             SharedPreferences.Editor editor = prefs.edit();
             editor.putInt("high_score", highScore);
             editor.apply();
-            // Log to confirm update
 
-            Log.d("GameView", "New High Score: " + highScore);
+            ((Activity) getContext()).runOnUiThread(() ->
+                    Toast.makeText(getContext(), "Congratulations!!!New High Score: " + highScore, Toast.LENGTH_LONG).show()
+            );
 
-            showHighScoreToast();
-
-            // Vibrate when the player achieves a new high score
             vibrateOnCollision(getContext());
-
-
         }
     }
-    private void showHighScoreToast() {
-        // Use the Toast.makeText() method to display a message
-        Toast.makeText(getContext(), "New High Score: " + highScore, Toast.LENGTH_LONG).show();
-    }
-
-
-
 
     private void changeBackgroundColor() {
         currentColorIndex = (currentColorIndex + 1) % backgroundColors.length;
