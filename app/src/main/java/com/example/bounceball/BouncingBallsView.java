@@ -3,7 +3,6 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.RectF;
-import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.View;
 import java.util.Random;

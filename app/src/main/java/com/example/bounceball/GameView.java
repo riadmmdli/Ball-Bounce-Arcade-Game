@@ -9,7 +9,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.os.Build;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -31,11 +30,10 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     private SharedPreferences prefs;
 
-    private boolean ballBouncedThisFrame = false; // Flag to track if the ball bounced this frame
 
     private boolean isCountingDown = false;
     private int countdownValue = 3;
-    private long countdownStartTime;
+
     private SoundPool soundPool;
     private int bounceSoundId;
 
@@ -367,7 +365,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         isGameOver = false;
         ball = new Ball(this , 300, 300, 40 ); // Reset ball position
         platform.setX(getWidth() / 2 - platform.getWidth() / 2); // Center the platform
-        ballBouncedThisFrame = false; // Reset bounce flag
+
 
     }
 }

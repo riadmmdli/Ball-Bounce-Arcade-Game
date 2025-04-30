@@ -12,12 +12,11 @@ import android.widget.TextView;
 import android.widget.ImageButton;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
+
 
 import android.content.Intent;
-import android.widget.TextView;
+
 
 import java.util.Locale;
 
@@ -41,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
 
-        // 🔧 FIXED: Initialize sharedPreferences first
+       // Initialize sharedPreferences first
         sharedPreferences = getSharedPreferences("GamePrefs", MODE_PRIVATE);
 
         // ✅ Load and apply saved language
