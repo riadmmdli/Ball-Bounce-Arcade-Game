@@ -8,7 +8,7 @@ import android.graphics.Paint;
 
 public class Ball {
     private int x, y, radius;
-    private int dx = 15, dy = 10;
+    private int dx = 25, dy = 15;
     private Paint paint;
 
     private SharedPreferences sharedPreferences;

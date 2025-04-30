@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.bounceball"
-        minSdk = 24
+        minSdk = 31
         targetSdk = 35 // Update targetSdk to match compileSdk
 
         versionCode = 1
